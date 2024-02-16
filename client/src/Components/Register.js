@@ -4,8 +4,7 @@ import {
   Step,
   StepLabel,
   TextField,
-  FormControl,
-  FormGroup,
+  FormControl, 
   FormControlLabel,
   RadioGroup,
   Radio,
@@ -36,7 +35,7 @@ function Register() {
   const [Adress, setAddress] = useState("");
   //const [profilPicture,setProfilPicture] =useState("")
 
-  const [companyName, setCompanyName] = useState("");
+  
   const [domaine, setdomaine] = useState("");
 
   const [nom, setNom] = useState("");
@@ -58,7 +57,7 @@ function Register() {
     bodyFormData.append("image", file);
     setUploading(true);
     axios
-      .post("/users/uploads", bodyFormData, {
+      .post("/users/", bodyFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -90,12 +89,31 @@ function Register() {
 
        }
     }
+
+
     console.log(newUser)
     dispatch(register(newUser))
     handleClose();
     navigate("/")
   }
-  
+  const register_user_societe = () => {
+    const newUser = {
+      email, 
+      motDePasse ,
+      profilPicture,
+       typeuser,
+       phoneNumbre,
+       Adress,
+       societe :{nom,domaine
+       }
+    }
+
+
+    console.log(newUser)
+    dispatch(register(newUser))
+    handleClose();
+    navigate("/")
+  }
   
 
   const [show, setShow] = useState(false);
@@ -113,6 +131,8 @@ function Register() {
     },
   };
 
+
+  
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
@@ -166,15 +186,16 @@ function Register() {
             </FormControl>
 
             <TextField
-              label="Phone number"
+              label="Phone Number"
+              value={phoneNumbre}
               fullWidth
-               
               margin="normal"
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
 
             <TextField
               label="Address"
+              value={Adress}
               fullWidth
               margin="normal"
               onChange={(e) => setAddress(e.target.value)}
@@ -190,20 +211,22 @@ function Register() {
                   label="Company name"
                   fullWidth
                   margin="normal"
-                  onChange={(e) => setCompanyName(e.target.value)}
+                  onChange={(e) => setNom(e.target.value)}
                 />
-                <TextField label="domaine" fullWidth margin="normal" />
+                <TextField label="domaine" fullWidth margin="normal" onChange={(e) => setdomaine(e.target.value)} />
               </div>
             ) : (
               <div>
                 <TextField
                   label="Nom"
+                  value={nom}
                   fullWidth
                   margin="normal"
                   onChange={(e) => setNom(e.target.value)}
                 />
                 <TextField
                   label="Prenom"
+                  value={prenom}
                   fullWidth
                   margin="normal"
                   onChange={(e) => setPrenom(e.target.value)}
@@ -230,6 +253,7 @@ function Register() {
                 <TextField
                   label="Age"
                   fullWidth
+                  value={age}
                   margin="normal"
                   onChange={(e) => setAge(e.target.value)}
                 />
@@ -298,24 +322,28 @@ function Register() {
               <div>
                 <TextField
                   label="Skills"
+                  value={skills}
                   fullWidth
                   margin="normal"
                   onChange={(e) => setSkills(e.target.value)}
                 />
                 <TextField
                   label="Certificates"
+                  value={certificat}
                   fullWidth
                   margin="normal"
                   onChange={(e) => setCertificates(e.target.value)}
                 />
                 <TextField
                   label="Language"
+                  value={langue}
                   fullWidth
                   margin="normal"
                   onChange={(e) => setLangue(e.target.value)}
                 />
                 <TextField
                   label="Experience"
+                  value={experience}
                   fullWidth
                   margin="normal"
                   onChange={(e) => setExperience(e.target.value)}
@@ -374,8 +402,15 @@ function Register() {
           >
             {activeStep === steps.length ? (
               <div>
-                <p>All steps completed - you're finished!</p>
-                <Button onClick={register_user_employe}>Submit</Button>
+                <p>All steps completed - you're finished!</p> 
+                <div>
+      <p>All steps completed - you're finished!</p>
+      {typeuser === "societe" ? (
+        <Button onClick={register_user_societe}>Submit</Button>
+      ) : (
+        <Button onClick={register_user_employe}>Submit</Button>
+      )}
+    </div>
               </div>
             ) : (
               <div>

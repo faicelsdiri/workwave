@@ -17,7 +17,8 @@ import Login from './Login';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { get_auth_user, logout } from '../Redux/actions';
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
+import axios from 'axios';
 
 
 
@@ -25,6 +26,33 @@ import { useEffect } from 'react';
 function Nav() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+
+  const [uploading, setUploading] = useState(false);
+  const [profilPicture, setImage] = useState("");
+  const uploadProfileImage = (e) => {
+    const file = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append("image", file);
+    setUploading(true);
+    axios
+      .post("/users/", bodyFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        setImage(response.data);
+        setUploading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setUploading(false);
+      });
+  };
+
+
+
 
 
   //redux 
@@ -37,7 +65,7 @@ function Nav() {
   const navigate = useNavigate()
   const logout_user = () => {
     dispatch(logout());
-    navigate("/")
+    navigate("/home")
   };
 
   const handleOpenNavMenu = (event) => {
@@ -57,7 +85,7 @@ function Nav() {
  
   const guestUser = (<div style={{display :'flex'}} >
 <div style={{paddingRight :"20px"  }}>
-<Login /></div>
+<Login user={user} /></div>
 <div style={{paddingRight :"20px"  }}>
           <Register/></div></div>
   );
@@ -65,7 +93,7 @@ function Nav() {
 <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src={"./uploads/1707422959187.png"} />
+              <Avatar alt="Remy Sharp" src={profilPicture} />
               </IconButton>
             </Tooltip>
             <Menu

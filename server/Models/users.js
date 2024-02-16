@@ -8,12 +8,12 @@ const SocieteSchema = new mongoose.Schema({
     domaine: {
         type: String,
         required: true,
-    }
+    } 
 });
 
 const EmployeSchema = new mongoose.Schema({
     nom: {
-        type: String,
+        type: String, 
         required: true,
     },
     prenom: {
